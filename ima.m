@@ -1,0 +1,30 @@
+img_path_list = dir('*.png');%获取该文件夹中所有png格式的图像 
+image_name = img_path_list(1).name;% 图像名 
+I =  imread(image_name);
+out =  regexp(image_name,'\d*','match');%提取字符串中的数字并转换成字符串
+str_j = cat(2,out{:});
+dimen_x=4;%块中的行数
+dimen_y=8;%块中的列数
+dimen=8;%thumbnail block dimension
+str_d_x=num2str(dimen_x);
+str_d_y=num2str(dimen_y);
+str_d=num2str(dimen);
+C=strcat('2',str_j,'0',str_d_x,str_d_y,str_d);
+key=str2num(C);
+C=strcat('2',str_j,'1',str_d_x,str_d_y,str_d);
+ key_seven=str2num(C);
+C=strcat('2',str_j,'2',str_d_x,str_d_y,str_d);
+key_per_MSB=str2num(C);
+R=I(:,:,1);
+G=I(:,:,2);
+B=I(:,:,3);
+en_R=Encrypt(R,dimen_x,dimen_y,dimen,key,key_seven,key_per_MSB);
+en_G=Encrypt(G,dimen_x,dimen_y,dimen,key,key_seven,key_per_MSB);
+en_B=Encrypt(B,dimen_x,dimen_y,dimen,key,key_seven,key_per_MSB);
+en_I=cat(3,en_R,en_G,en_B);
+
+de_R=Decrypt(en_R,dimen_x,dimen_y,dimen,key,key_seven,key_per_MSB);
+de_G=Decrypt(en_G,dimen_x,dimen_y,dimen,key,key_seven,key_per_MSB);
+de_B=Decrypt(en_B,dimen_x,dimen_y,dimen,key,key_seven,key_per_MSB);
+
+de_I=cat(3,de_R,de_G,de_B);
